@@ -1,0 +1,133 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Comment {
+  id         Int         @id @default(autoincrement())
+  text       String
+  createdAt  DateTime    @default(now())
+  userId     Int
+  bseIpoNo   Int?
+  ipoSymbol  String?
+  bseIpo     bseIpo?     @relation(fields: [bseIpoNo], references: [ipoNo], onDelete: NoAction)
+  currentIpo currentIpo? @relation(fields: [ipoSymbol], references: [symbol], onDelete: NoAction)
+  User       User        @relation(fields: [userId], references: [id])
+}
+
+model IpoPast {
+  id              Int      @id @default(autoincrement())
+  company         String?
+  symbol          String?  @unique
+  htmSym          String?
+  ipoStartDate    String?
+  ipoEndDate      String?
+  linkRemovalDate String?
+  priceRange      String?
+  issuePrice      String?
+  listingDate     String?
+  securityType    String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model SubscriptionCategory {
+  id               Int        @id @default(autoincrement())
+  srNo             Int?
+  category         String
+  noOfShareOffered Float?
+  noOfSharesBid    Float?
+  noOfTotalMeant   Float?
+  ipoId            Int
+  currentIpo       currentIpo @relation(fields: [ipoId], references: [id])
+}
+
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  username  String    @unique
+  email     String    @unique
+  password  String
+  createdAt DateTime  @default(now())
+  Comment   Comment[]
+}
+
+model currentIpo {
+  id                   Int                    @id @default(autoincrement())
+  symbol               String?                @unique
+  companyName          String?
+  gmp                  Float?
+  issueStartDate       String?
+  issueEndDate         String?
+  issueSize            String?
+  issuePeriod          String?
+  issueType            String?
+  priceRange           String?
+  series               String?
+  status               String?
+  faceValue            String?
+  bidLot               String?
+  minOrderQty          String?
+  maxRetailAmt         String?
+  maxQibQty            String?
+  maxNibQty            String?
+  leadManagers         String?
+  sponsorBank          String?
+  noOfSharesOffered    Float?
+  noOfsharesBid        Float?
+  probability          Float?
+  updatedAt            DateTime               @updatedAt
+  noOfTime             Float?
+  issuePrice           String?
+  noOfTimeSme          Float?
+  Comment              Comment[]
+  SubscriptionCategory SubscriptionCategory[]
+}
+
+model upcomingIpo {
+  id             Int      @id @default(autoincrement())
+  symbol         String?  @unique
+  companyName    String?
+  issuePeriod    String?
+  issueStartDate String?
+  issueEndDate   String?
+  issueSize      String?
+  issueType      String?
+  issuePrice     String?
+  series         String?
+  status         String?
+  faceValue      String?
+  bidLot         String?
+  minOrderQty    String?
+  maxRetailAmt   String?
+  maxQibQty      String?
+  maxNibQty      String?
+  leadManagers   String?
+  sponsorBank    String?
+  gmp            Float?
+  updatedAt      DateTime @updatedAt
+  priceRange     String?
+  issueSizeRs    String?
+}
+
+model bseIpo {
+  id                Int       @id @default(autoincrement())
+  companyName       String?
+  gmp               Float?
+  series            String?
+  status            String?
+  faceValue         String?
+  noOfTime          Float?
+  probability       Float?
+  updatedAt         DateTime  @updatedAt
+  priceRange        String?
+  ipoNo             Int?      @unique
+  issueStartDate    String?
+  issueEndDate      String?
+  totalSubscription Float?
+  Comment           Comment[]
+}

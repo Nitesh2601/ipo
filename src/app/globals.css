@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
@@ -119,4 +121,11 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+
+
+/* Headline font */
+.headline-font {
+  font-family: var(--font-inter-headline), var(--font-geist-sans), sans-serif;
 }
