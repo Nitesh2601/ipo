@@ -20,13 +20,8 @@ export function ForthIposTable() {
   
 
   const fetchIpos = async () => {
-    try {
-      const res = await axios.get("/api/bseSmeForth");
-      return res.data?.data || []; // always return array to prevent UI errors
-    } catch (err) {
-      console.error("Failed to fetch BSE SME Forthcoming IPOs:", err);
-      return []; // safe fallback
-    }
+    const res = await axios.get("/api/bseSmeForth");
+    return res.data?.data || []; // always return array to prevent UI errors
   };
   
   const { data, isLoading, error } = useQuery({

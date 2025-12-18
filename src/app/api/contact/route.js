@@ -1,5 +1,5 @@
 import { sendContactEmail } from "@/lib/emailServices/contactForm";
-
+import { NextResponse } from "next/server";
 export async function POST(req) {
   try {
     const { name, email, message } = await req.json();
@@ -11,7 +11,7 @@ export async function POST(req) {
     // Send the email
     await sendContactEmail({ name, email, message });
 
-    return Response.json(
+    return NextResponse.json(
       { success: true, message: "Message sent successfully" },
       { status: 200 }
     );
@@ -19,7 +19,7 @@ export async function POST(req) {
   } catch (error) {
     console.error("❌ Contact form API error:", error);
 
-    return Response.json(
+    return NextResponse.json(
       { success: false, message: "Server error", error: error.message },
       { status: 500 }
     );

@@ -21,13 +21,7 @@ export async function GET() {
       success: true,
       count: data.length,
       data,
-    },
-      {
-        headers: {
-          // 🔥 ISR / caching headers
-          "Cache-Control": "s-maxage=300, stale-while-revalidate=59",
-        },
-      }
+    }
     );
 
   } catch (error) {

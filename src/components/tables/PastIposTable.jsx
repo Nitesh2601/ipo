@@ -21,14 +21,9 @@ export function PastIpoTable() {
 
   const fetchIpos = async ({ queryKey }) => {
     const [_key, page] = queryKey;
-    try {
       const res = await axios.get(`/api/pastIpo?page=${page}`);
       // Expecting { data, total, totalPages }
       return res.data ?? { data: [], total: 0, totalPages: 0 };
-    } catch (err) {
-      console.error("Failed to fetch past IPOs:", err);
-      return { data: [], total: 0, totalPages: 0 }; // safe fallback
-    }
   };
   
   const { data, isLoading, error } = useQuery({

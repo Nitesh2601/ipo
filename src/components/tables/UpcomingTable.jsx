@@ -21,13 +21,8 @@ export function UpcomingTable() {
   const [open, setOpen] = React.useState(false);
 
   const fetchIpos = async () => {
-    try {
-      const res = await axios.get("/api/upcoming");
-      return res.data?.data || []; // always return array to prevent errors
-    } catch (err) {
-      console.error("Failed to fetch upcoming IPOs:", err);
-      return []; // safe fallback
-    }
+    const res = await axios.get("/api/upcoming");
+    return res.data?.data || []; // always return array to prevent errors
   };
   
   const { data, isLoading, error } = useQuery({

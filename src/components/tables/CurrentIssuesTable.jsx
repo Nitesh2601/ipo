@@ -33,16 +33,11 @@ export function CurrentIssuesTable() {
   
 
   const fetchIpos = async () => {
-    try {
-      const res = await axios.get("/api/basic");
-      return res.data?.data ?? []; // always return array
-    } catch (err) {
-      console.error("Failed to fetch IPOs:", err);
-      return []; // prevent UI crash
-    }
+    const res = await axios.get("/api/basic");
+    return res.data?.data ?? []; // always return array
   };
   
-  const {data = [],isLoading,isError,} = useQuery({
+  const {data,isLoading,isError,} = useQuery({
     queryKey: ["current-ipos"],
     queryFn: fetchIpos,
   
