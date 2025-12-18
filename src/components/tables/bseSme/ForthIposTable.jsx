@@ -20,18 +20,30 @@ export function ForthIposTable() {
   
 
   const fetchIpos = async () => {
-    const res = await axios.get("/api/bseSmeForth");
-    return res.data.data || []; // adjust if API returns { success, data }
+    try {
+      const res = await axios.get("/api/bseSmeForth");
+      return res.data?.data || []; // always return array to prevent UI errors
+    } catch (err) {
+      console.error("Failed to fetch BSE SME Forthcoming IPOs:", err);
+      return []; // safe fallback
+    }
   };
-
+  
   const { data, isLoading, error } = useQuery({
     queryKey: ["bseForth-ipos"],
     queryFn: fetchIpos,
+  
+    // 🔥 CACHING & STABILITY OPTIONS
+    staleTime: 5 * 60 * 1000,        // cache considered fresh for 5 minutes
+    cacheTime: 10 * 60 * 1000,       // keep in memory for 10 minutes even if unmounted
+    refetchOnWindowFocus: false,     // don't refetch when tab is focused
+    retry: 2,                        // retry twice if API fails (Supabase wake-up)
+    retryDelay: 1000,                // 1 second between retries
   });
-
+  
   if (isLoading) return "Loading IPOs...";
   if (error) return "Error loading IPOs";
-
+  
   return (
     <>
      

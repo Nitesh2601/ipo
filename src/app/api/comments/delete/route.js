@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-
+import { NextResponse } from "next/server";
 export async function POST(req) {
     try {
       const { commentId, userId } = await req.json();
@@ -9,14 +9,14 @@ export async function POST(req) {
       });
   
       if (!comment) {
-        return Response.json(
+        return  NextResponse.json(
           { success: false, message: "Comment not found" },
           { status: 404 }
         );
       }
   
       if (comment.userId !== userId) {
-        return Response.json(
+        return  NextResponse.json(
           { success: false, message: "Unauthorized" },
           { status: 403 }
         );
@@ -26,9 +26,9 @@ export async function POST(req) {
         where: { id: commentId },
       });
   
-      return Response.json({ success: true });
+      return  NextResponse.json({ success: true });
     } catch (error) {
-      return Response.json(
+      return  NextResponse.json(
         { success: false, message: "Failed to delete comment" },
         { status: 500 }
       );

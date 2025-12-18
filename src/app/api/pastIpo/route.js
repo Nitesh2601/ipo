@@ -1,6 +1,6 @@
 
 import prisma from "@/lib/prisma";
-
+import { NextResponse } from "next/server";
 export async function GET(req) {
   try {
 
@@ -22,18 +22,26 @@ export async function GET(req) {
 
     console.log("Fetched Upcoming IPO Data:", JSON.stringify(data, null, 2));
 
-    return Response.json({
+    return NextResponse.json(
+      {
         success: true,
         page,
         totalPages: Math.ceil(total / limit),
         totalItems: total,
         data,
-    });
+    },
+      {
+        headers: {
+          // 🔥 ISR / caching headers
+          "Cache-Control": "s-maxage=300, stale-while-revalidate=59",
+        },
+      }
+    );
 
   } catch (error) {
     console.error("Error fetching upcoming IPOs:", error);
 
-    return Response.json(
+    return NextResponse.json(
       { success: false, message: "Failed to fetch upcoming IPO data" },
       { status: 500 }
     );

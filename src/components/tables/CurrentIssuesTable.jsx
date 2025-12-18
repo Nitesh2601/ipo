@@ -33,18 +33,30 @@ export function CurrentIssuesTable() {
   
 
   const fetchIpos = async () => {
-    const res = await axios.get("/api/basic");
-    return res.data.data || []; // adjust if API returns { success, data }
+    try {
+      const res = await axios.get("/api/basic");
+      return res.data?.data ?? []; // always return array
+    } catch (err) {
+      console.error("Failed to fetch IPOs:", err);
+      return []; // prevent UI crash
+    }
   };
-
-  const { data, isLoading, error } = useQuery({
+  
+  const {data = [],isLoading,isError,} = useQuery({
     queryKey: ["current-ipos"],
     queryFn: fetchIpos,
+  
+    // 🔥 CACHING & STABILITY OPTIONS
+    staleTime: 5 * 60 * 1000,        // cache data for 5 minutes
+    cacheTime: 10 * 60 * 1000,       // keep in memory for 10 minutes
+    refetchOnWindowFocus: false,     // don't refetch on tab switch
+    retry: 2,                        // retry if Supabase is asleep
+    retryDelay: 1000,
   });
-
+  
   if (isLoading) return "Loading IPOs...";
-  if (error) return "Error loading IPOs";
-    
+  if (isError) return "Error loading IPOs";
+  
  
 
   
@@ -122,6 +134,7 @@ export function CurrentIssuesTable() {
               className={`cursor-pointer hover:bg-gray-100 ${
                   ipo.series === "EQ" ? "bg-blue-50 hover:bg-blue-100"  : "bg-yellow-50  hover:bg-yellow-100"
                 }`}
+                title="Click to show more details" 
               onClick={() => {
                 setSelectedIpo(ipo);
                 setOpen(true);

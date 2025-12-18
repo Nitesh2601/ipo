@@ -21,18 +21,32 @@ export function PastIpoTable() {
 
   const fetchIpos = async ({ queryKey }) => {
     const [_key, page] = queryKey;
-    const res = await axios.get(`/api/pastIpo?page=${page}`);
-    return res.data; // {data, total, totalPages}
+    try {
+      const res = await axios.get(`/api/pastIpo?page=${page}`);
+      // Expecting { data, total, totalPages }
+      return res.data ?? { data: [], total: 0, totalPages: 0 };
+    } catch (err) {
+      console.error("Failed to fetch past IPOs:", err);
+      return { data: [], total: 0, totalPages: 0 }; // safe fallback
+    }
   };
-
+  
   const { data, isLoading, error } = useQuery({
     queryKey: ["past-ipos", page],
     queryFn: fetchIpos,
-    keepPreviousData: true,
+  
+    // 🔥 CACHING & STABILITY OPTIONS
+    staleTime: 5 * 60 * 1000,        // cache fresh for 5 min
+    cacheTime: 10 * 60 * 1000,       // keep in memory for 10 min
+    refetchOnWindowFocus: false,     // no refetch on tab switch
+    retry: 2,                        // retry twice if API fails
+    retryDelay: 1000,                // 1 second between retries
+    keepPreviousData: true,          // keep old data while fetching new page
   });
-
-  if (isLoading) return "Loading IPOs...";
-  if (error) return "Error loading IPOs";
+  
+  if (isLoading) return "Loading past IPOs...";
+  if (error) return "Error loading past IPOs";
+  
 
   return (
     <>

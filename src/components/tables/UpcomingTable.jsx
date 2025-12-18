@@ -21,18 +21,30 @@ export function UpcomingTable() {
   const [open, setOpen] = React.useState(false);
 
   const fetchIpos = async () => {
-    const res = await axios.get("/api/upcoming");
-    return res.data.data || []; // adjust if API returns { success, data }
+    try {
+      const res = await axios.get("/api/upcoming");
+      return res.data?.data || []; // always return array to prevent errors
+    } catch (err) {
+      console.error("Failed to fetch upcoming IPOs:", err);
+      return []; // safe fallback
+    }
   };
-
+  
   const { data, isLoading, error } = useQuery({
     queryKey: ["upcoming-ipos"],
     queryFn: fetchIpos,
+  
+    // 🔥 CACHING & STABILITY
+    staleTime: 5 * 60 * 1000,        // cache considered fresh for 5 min
+    cacheTime: 10 * 60 * 1000,       // keep in memory for 10 min even if unmounted
+    refetchOnWindowFocus: false,     // don't refetch when user switches tabs
+    retry: 2,                        // retry twice if API fails (Supabase wake-up)
+    retryDelay: 1000,                // 1 second between retries
   });
-
-  if (isLoading) return "Loading IPOs...";
-  if (error) return "Error loading IPOs";
-
+  
+  if (isLoading) return "Loading upcoming IPOs...";
+  if (error) return "Error loading upcoming IPOs";
+  
   return (
     <>
       {/* 🔹 SEO Semantic Wrapper */}
@@ -107,6 +119,7 @@ export function UpcomingTable() {
               className={`cursor-pointer hover:bg-gray-100 ${
                 ipo.series === "EQ" ? "bg-blue-50 hover:bg-blue-100" : "bg-yellow-50 hover:bg-yellow-100"
               }`}
+              title="Click to show more details" 
               onClick={() => {
                 setSelectedIpo(ipo);
                 setOpen(true);
