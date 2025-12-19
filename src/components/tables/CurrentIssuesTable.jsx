@@ -129,7 +129,7 @@ export function CurrentIssuesTable() {
               className={`cursor-pointer hover:bg-gray-100 ${
                   ipo.series === "EQ" ? "bg-blue-50 hover:bg-blue-100"  : "bg-yellow-50  hover:bg-yellow-100"
                 }`}
-                title="Click to show more details" 
+                title="Click to see more details" 
               onClick={() => {
                 setSelectedIpo(ipo);
                 setOpen(true);
