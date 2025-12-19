@@ -20,7 +20,8 @@ import { EncryptedText } from "@/components/ui/encrypted-text"
 import ClientOnly from "@/components/ClientOnly";
 
 import { toast } from "sonner";
-
+import Image from 'next/image';
+import logo from '@/app/icon.png';
 
 export default function Home() {
 
@@ -33,29 +34,42 @@ export default function Home() {
         <div className="w-full px-8 mx-auto ">
           <Navbar loginOpen={loginOpen} setLoginOpen={setLoginOpen} />
 
-          <nav className="w-full p-3 mt-4  flex justify-end pr-8 rounded-4xl items-center bg-[#35a13f]">
+          <nav className="w-full p-3 mt-4 flex justify-between pr-8 rounded-4xl items-center bg-[#35a13f] relative">
+              {/* Logo - absolute positioned */}
+              <div className="absolute left-8 ">
+                <Image 
+                  src={logo} 
+                  alt="IPO Hunters Logo" 
+                  width={60} 
+                  height={60}
+                  priority
+                  
+                />
+              </div>
+              
+              {/* Right side elements - with left margin to avoid logo overlap */}
+              <div className="flex items-center gap-4 ml-auto">
+                {session && (
+                  <span className="text-white font-semibold text-lg">
+                    Hi, {session.user.name}
+                  </span>
+                )}
 
-            {/* Centered & padded welcome text */}
-            {session && (
-              <span className="text-white font-semibold px-4 py-2 text-lg">
-                Hi, {session.user.name}
-              </span>
-            )}
-
-            <Button
-              className="cursor-pointer bg-gray-100 hover:bg-gray-200 text-black"
-              onClick={async() => {
-                if (session) {
-                  await signOut({ redirect: false });
-                   toast.success("Logged out successfully");
-                } else {
-                  setLoginOpen(true);
-                }
-              }}
-            >
-              {session ? "Logout" : "Login"}
-            </Button>
-          </nav>
+                <Button
+                  className="cursor-pointer bg-gray-100 hover:bg-gray-200 text-black"
+                  onClick={async() => {
+                    if (session) {
+                      await signOut({ redirect: false });
+                      toast.success("Logged out successfully");
+                    } else {
+                      setLoginOpen(true);
+                    }
+                  }}
+                >
+                  {session ? "Logout" : "Login"}
+                </Button>
+              </div>
+            </nav>
 
           <section className=" relative w-full h-[70vh]  flex flex-col justify-center items-center text-center px-4">
              {/* 🔹 SEO PRIMARY HEADING (invisible to users) */}
