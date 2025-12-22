@@ -198,13 +198,23 @@ export function CurrentIssuesTable() {
               <TableCell>{ipo.priceRange ?? "N/A"}</TableCell>
               {/* <TableCell className="text-blue-600"> {`${ipo.noOfTime.toFixed(2)} x` ?? "N/A"}</TableCell> */}
               <TableCell className="text-blue-600">
-                  {ipo.series
-                      ? ipo.series === "EQ"
-                        ? `${ipo.noOfTime.toFixed(2)} x`
-                        : `${ipo.noOfTimeSme.toFixed(2)} x`
-                      : "N/A"}
-               </TableCell>
-              <TableCell className="text-purple-600">{ipo.probability ? `${Math.min(ipo.probability, 100).toFixed(2)}%` : "N/A"}</TableCell>
+                {ipo.series === "EQ"
+                  ? (typeof ipo.noOfTime === "number"
+                      ? `${ipo.noOfTime.toFixed(2)} x`
+                      : "N/A")
+                  : ipo.series
+                  ? (typeof ipo.noOfTimeSme === "number"
+                      ? `${ipo.noOfTimeSme.toFixed(2)} x`
+                      : "N/A")
+                  : "N/A"}
+              </TableCell>
+
+              <TableCell className="text-purple-600">
+                {typeof ipo.probability === "number"
+                  ? `${Math.min(ipo.probability, 100).toFixed(2)}%`
+                  : "N/A"}
+              </TableCell>
+
               <TableCell>{ipo.issueStartDate ?? "N/A"}</TableCell>
               <TableCell>{ipo.issueEndDate ?? "N/A"}</TableCell>
             </TableRow>

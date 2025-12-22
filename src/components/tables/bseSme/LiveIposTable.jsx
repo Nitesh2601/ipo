@@ -134,7 +134,12 @@ export function LiveIposTable() {
                   );
                 })() : "N/A"}
               </TableCell>
-              <TableCell className='text-blue-700'>{`${ipo.totalSubscription.toFixed(2)} x`?? "N/A"}</TableCell>
+              <TableCell className="text-blue-700">
+                {typeof ipo.totalSubscription === "number"
+                  ? `${ipo.totalSubscription.toFixed(2)} x`
+                  : "N/A"}
+              </TableCell>
+
               <TableCell>{ipo.priceRange ?? "N/A"}</TableCell>
               <TableCell>{ipo.faceValue ?? "N/A"}</TableCell>
               
