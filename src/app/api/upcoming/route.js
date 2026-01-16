@@ -13,7 +13,7 @@ export async function GET() {
       
     });
 
-    console.log("Fetched Upcoming IPO Data:", JSON.stringify(data, null, 2));
+    
 
     return NextResponse.json(
       {

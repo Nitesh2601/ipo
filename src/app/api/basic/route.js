@@ -7,7 +7,7 @@ export async function GET() {
       where:{
         status : 'Active',
       },
-
+      
       include: {
         SubscriptionCategory: true, // fetch related categories
       },

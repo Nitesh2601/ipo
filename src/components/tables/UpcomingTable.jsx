@@ -124,7 +124,7 @@ export function UpcomingTable() {
                  {ipo.companyName ?? "N/A"}
               </TableCell>
               
-              <TableCell>{ipo.series ==='EQ'?" Mainboard" :'SME'  ?? "N/A"}</TableCell>
+              <TableCell>{ipo.series ==='EQ'?" Mainboard" :ipo.series  ?? "N/A"}</TableCell>
               <TableCell>
                 {ipo.gmp && ipo.issuePrice ? (() => {
                   const r = calculateGmpFullRange(ipo.gmp, ipo.issuePrice);
